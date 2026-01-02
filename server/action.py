@@ -9,7 +9,6 @@ class ActionType(Enum):
     Mortgage = auto()
     CardEffect = auto()
 
-
 class Action:
     ID=0
     def __init__(self, id):
