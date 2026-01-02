@@ -10,7 +10,6 @@ class ActionType(Enum):
     CardEffect = auto()
 
 
-
 class Action:
     ID=0
     def __init__(self, id):
