@@ -60,19 +60,3 @@ class Stack:
 
 
 
-
-
-
-# m = Stack(10)
-# m.push(5)
-# m.push(2)
-# m.push(8)
-# m.push(9)
-# m.peek()
-# m.reverse_recursively()
-# m.peek()
-
-
-
-
-

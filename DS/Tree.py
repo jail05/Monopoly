@@ -1,6 +1,3 @@
-
-
-
 class Node:
     def __init__(self , data):
         self.data = data
@@ -152,12 +149,4 @@ class Tree:
 
 
 
-
-tt = Tree()
-
-tt.insert(1)
-tt.insert(2)
-tt.insert(3)
-tt.insert(4)
-tt.insert(5)
 
