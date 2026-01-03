@@ -18,3 +18,5 @@ class Card:
         self.description = description
         self.effect_type = effect_type
         self.effect_value = effect_value
+
+
