@@ -4,6 +4,7 @@ from ..DS.stack import Stack
 from .card import CardEffectType
 
 class PlayerState(Enum):
+    CURRENT_TURN = auto()
     ACTIVE = auto()
     IN_JAIL = auto()
     BANKRUPT = auto()
@@ -26,15 +27,23 @@ class Player:
             for i in range(amount):
                 self.current_tile = self.current_tile.next()
 
-    def add_money(self,amount):
+
+    def pay(amount, self):
+        if self.can_afford(amount):
+            self.state = PlayerState.BANKRUPT
+            return False
+        else:
+            self.balance -= amount
+            return True
+
+    def recieve(self,amount):
         self.balance += amount
 
-    def deduct_money(self,amount):
-        self.balance -= amount
-        if self.balance <= 0:
-            self.state = PlayerState.BANKRUPT
+    #مصادره ی املاک بعد از ورشکستگی
+    def clear_properties(self):
+        self.state = PlayerState.BANKRUPT
 
-    def can_afford(self,amount):
+    def ability_to_pay(self,amount):
         return self.balance >= amount
 
     def add_property(self,property_id):
@@ -64,8 +73,21 @@ class Player:
     def build_hotel(self,property):
         property.has_hotel()
 
-    def set_tile(self,tile):
-        self.current_tile = tile
+    def go_to_jail(self):
+        self.jail_turns += 1
+        self.state = PlayerState.IN_JAIL
+
+    def leave_jail(self):
+        self.jail_turns -= 1
+        self.state = PlayerState.CURRENT_TURN
+
+    def Use_get_out_of_jail_card(self):
+        self.state = PlayerState.CURRENT_TURN
+
+    def propose_trade(other_player, offer, request):
+
+
+
 
     def get_card(self,chance):
         return chance.get_card()
