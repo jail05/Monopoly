@@ -21,6 +21,7 @@ class Player:
         self.state = PlayerState.ACTIVE
         self.jail_turns = 0
         self.action_history = Stack()
+        self.number_of_get_out_of_jail_card = 0
 
     def move(self,amount):
         if self.state == PlayerState.ACTIVE:
@@ -29,7 +30,7 @@ class Player:
 
 
     def pay(amount, self):
-        if self.can_afford(amount):
+        if self.ability_to_pay(amount):
             self.state = PlayerState.BANKRUPT
             return False
         else:
@@ -88,8 +89,6 @@ class Player:
         pass
 
 
-
-
     def get_card(self,chance):
         return chance.get_card()
 
@@ -97,7 +96,17 @@ class Player:
         if card.effect_type == CardEffectType.MOVE:
             self.move(card.effect_value)
         elif card.effect_type == CardEffectType.PAY_MONEY:
-            pass
+            done = self.pay(card.effect_value)
+        elif card.effect_type == CardEffectType.RECEIVE_MONEY:
+            self.recieve(card.effect_value)
+        elif card.effect_type == CardEffectType.GET_OUT_OF_JAIL:
+            self.go_to_jail()
+        elif card.effect_type == CardEffectType.GET_OUT_OF_JAIL:
+
+        elif card.effect_type == CardEffectType.TAX:
+            don = self.pay(card.effect_value)
+
+
 
 
 
