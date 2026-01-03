@@ -11,8 +11,10 @@ class CardEffectType(Enum):
 
 
 class Card:
-    def __init__(self, card_id, description, effect_type, effect_value):
-        self.card_id = card_id
+    ID = 0
+    def __init__(self,description, effect_type, effect_value):
+        Card.ID += 1
+        self.card_id = Card.ID
         self.description = description
         self.effect_type = effect_type
         self.effect_value = effect_value
