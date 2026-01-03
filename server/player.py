@@ -1,6 +1,7 @@
 from ..DS.Tree import Tree
 from enum import Enum, auto
 from ..DS.stack import Stack
+from .card import CardEffectType
 
 class PlayerState(Enum):
     ACTIVE = auto()
@@ -19,6 +20,11 @@ class Player:
         self.state = PlayerState.ACTIVE
         self.jail_turns = 0
         self.action_history = Stack()
+
+    def move(self,amount):
+        if self.state == PlayerState.ACTIVE:
+            for i in range(amount):
+                self.current_tile = self.current_tile.next()
 
     def add_money(self,amount):
         self.balance += amount
@@ -40,8 +46,38 @@ class Player:
     def has_property(self,property_id):
         return self.own_properties.find_node(property_id)
 
+    def mortgage(self,property):
+        self.balance += property.current_rent()+30
+        property.mortgage()
+
+    def unmortgage_property(self,property):
+        if self.can_afford(property.current_rent()):
+            self.balance += property.current_rent() + 30
+            property.unmortgage()
+            return True
+        else:
+            return False
+
+    def build_house(self,property):
+        property.plus_count()
+
+    def build_hotel(self,property):
+        property.has_hotel()
+
     def set_tile(self,tile):
         self.current_tile = tile
+
+    def get_card(self,chance):
+        return chance.get_card()
+
+    def apply_card_effect(self,card):
+        if card.effect_type == CardEffectType.MOVE:
+            self.move(card.effect_value)
+        elif card.effect_type == CardEffectType.PAY_MONEY:
+
+
+
+
 
 
 
