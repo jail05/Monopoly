@@ -85,6 +85,7 @@ class Player:
         self.state = PlayerState.CURRENT_TURN
 
     def propose_trade(other_player, offer, request):
+        pass
 
 
 
@@ -96,6 +97,7 @@ class Player:
         if card.effect_type == CardEffectType.MOVE:
             self.move(card.effect_value)
         elif card.effect_type == CardEffectType.PAY_MONEY:
+            pass
 
 
 
