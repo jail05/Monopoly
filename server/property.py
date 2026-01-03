@@ -13,6 +13,7 @@ class Property:
         self.owner_id = None
 
 
+
     def has_owner(self):
         if self.owner_id==None:
             return False
