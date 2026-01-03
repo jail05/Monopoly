@@ -99,10 +99,10 @@ class Player:
             done = self.pay(card.effect_value)
         elif card.effect_type == CardEffectType.RECEIVE_MONEY:
             self.recieve(card.effect_value)
-        elif card.effect_type == CardEffectType.GET_OUT_OF_JAIL:
+        elif card.effect_type == CardEffectType.GO_TO_JAIL:
             self.go_to_jail()
         elif card.effect_type == CardEffectType.GET_OUT_OF_JAIL:
-
+            pass
         elif card.effect_type == CardEffectType.TAX:
             don = self.pay(card.effect_value)
 
