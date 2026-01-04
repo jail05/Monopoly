@@ -2,6 +2,7 @@ from ..DS.Tree import Tree
 from enum import Enum, auto
 from ..DS.stack import Stack
 from .card import CardEffectType
+from .action import *
 
 class PlayerState(Enum):
     CURRENT_TURN = auto()
@@ -113,9 +114,29 @@ class Player:
         elif card.effect_type == CardEffectType.REPAIR:
             self.pay(self.hotel_count_for_repair*card.effect_value*3 + self.house_count_for_repair*card.effect_value)
 
+    def execute_trade(self, other_player, give_money, give_properties, take_money, take_properties):
+        self.balance -= give_money
+        other_player.balance += give_money
+
+        other_player.balance -= take_money
+        self.balance += take_money
 
 
+        for prop in give_properties:
+            prop.owner_id = other_player.id
+            self.own_properties.delete(prop)
+            other_player.own_properties.insert(prop)
 
+        for prop in take_properties:
+            prop.owner_id = self.id
+            other_player.own_properties.delete(prop)
+            self.own_properties.insert(prop)
+
+
+        action = Action(self.id)
+        action.action_type = ActionType.Trade
+        action.affected_entities = [other_player.id]
+        self.action_history.push(action)
 
 
 
