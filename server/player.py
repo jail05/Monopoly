@@ -84,6 +84,7 @@ class Player:
     def Use_get_out_of_jail_card(self):
         self.state = PlayerState.CURRENT_TURN
 
+
     def propose_trade(other_player, offer, request):
         pass
 
