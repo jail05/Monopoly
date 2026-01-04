@@ -21,7 +21,10 @@ class Player:
         self.own_properties = Tree()
         self.state = PlayerState.ACTIVE
         self.jail_turns = 0
-        self.action_history = Stack()
+
+        # این همون undoStack هست
+        self.action_history = Stack(100)
+        self.redo_stack = Stack(100)
         self.number_of_get_out_of_jail_card = 0
         self.house_count_for_repair = 0
         self.hotel_count_for_repair = 0
@@ -134,8 +137,7 @@ class Player:
             self.own_properties.insert(prop)
 
 
-        action = Action(self.id)
-        action.action_type = ActionType.Trade
+        action = Action(self.id,ActionType.Trade)
         action.affected_entities = [other_player.id]
         self.action_history.push(action)
 
@@ -156,6 +158,32 @@ class Player:
         elif card.effect_type == CardEffectType.REPAIR:
             self.pay(self.hotel_count_for_repair*card.effect_value*3 + self.house_count_for_repair*card.effect_value)
 
+    def add_action(self,action):
+        self.action_history.push(action)
+        self.redo_stack.empty()
+
+    def undo_action(self):
+        if self.action_history.isEmpty():
+            print("ops! No action to undo")
+            return
+        action = self.action_history.pop()
+        self.apply_state(action.previous_state)
+        self.redo_stack.push(action)
+
+    def redo_action(self):
+        if self.redo_stack.isEmpty():
+            print("ops! No action to redo")
+            return
+        action = self.redo_stack.pop()
+        self.apply_state(action.new_state)
+        self.action_history.push(action)
+
+    def apply_state(self,state):
+        self.balance = state["balance"]
+        self.current_tile = state["current_tile"]
+        self.state = state["player_state"]
+        self.jail_turns = state["jail_turns"]
+        self.own_properties = state["own_properties"]
 
 
 

@@ -12,12 +12,13 @@ class ActionType(Enum):
 
 class Action:
     ID=0
-    def __init__(self, id, action_type):
+    def __init__(self, action_type, actor_id, affected_entities, previous_state, new_state):
         Action.ID +=1
         self.action_id = Action.ID
         self.action_type = action_type
-        self.actor_id = id
-        self.affected_entities= []
-        self.previous_state = None
-        self.new_state = None
+        self.actor_id = actor_id
+        self.affected_entities= affected_entities
+        self.previous_state = previous_state
+        self.new_state = new_state
+
 
