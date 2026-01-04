@@ -93,8 +93,27 @@ class Player:
         self.state = PlayerState.CURRENT_TURN
         return True
 
-    def propose_trade(other_player, offer, request):
+
+    def can_trade(self, give_money, give_properties):
+        if self.balance< give_money:
+            return False
+        if give_properties :
+            for property in give_properties:
+                if property.owner_id != self.id and property.is_mortgaged():
+                    return False
+        return True
+
+    def propose_trade(self, other_player, give_money=0, give_properties=None, take_money=0, take_properties=None):
+        if give_properties is None:
+            give_properties = []
+        if take_properties is None:
+            take_properties = []
+        if not self.can_trade(give_money, give_properties):
+            return False
+        if not other_player.can_trade(take_money, take_properties):
+            return False
         pass
+
 
 
     def get_card(self,chance):
