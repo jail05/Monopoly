@@ -1,4 +1,16 @@
+from random import random
+
+
+
 class Server:
     def __init__(self):
-        player1 , player2, player3, player4 = Player()
-        players_list = [player1,player2,player3,player4]
+        pass
+
+
+
+    def roll_dice(self):
+        return random.randint(2,12)
+
+
+
+
