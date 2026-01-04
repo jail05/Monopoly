@@ -23,7 +23,7 @@ class Property:
     def is_mortgaged(self):
         return self.is_mortgaged
 
-    def current_base_rent(self):
+    def current_rent(self):
         if self.is_mortgaged():
             return 0
         elif self.has_hotel:
@@ -39,6 +39,18 @@ class Property:
     def can_build_hotel(self):
         return not(self.has_hotel) and not(self.is_mortgaged) and self.house_count == 3
 
+    def mortgage(self):
+        self.is_mortgaged = True
+
+    def unmortgage(self):
+        self.is_mortgaged = False
+
+    def house_counter(self):
+        self.house_count += 1
+
+    def has_hotel(self):
+        self.house_count = 0
+        return self.has_hotel
 
 
 
