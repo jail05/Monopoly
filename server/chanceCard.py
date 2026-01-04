@@ -1,5 +1,4 @@
 from .card import *
-from ..DS import quque
 from ..DS.quque import Queue
 
 
