@@ -1,8 +1,10 @@
 from .tile import TileType
 from .tile import Tile
+from ..DS.circularLinkedList import CircularLinkedList
 class Board:
     def __init__(self):
-        self.tiles = self.createTiles()
+        self.tiles = CircularLinkedList()
+        self.createTiles()
 
 
     def createTiles(self):
@@ -27,7 +29,8 @@ class Board:
         for t in tile_list:
             data = self.create_tile_data(t)
             tile = Tile(data=data, type=t)
-            self.tiles.append(tile)
+            self.tiles.Add(tile)
+
 
 
 
