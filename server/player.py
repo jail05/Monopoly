@@ -22,6 +22,8 @@ class Player:
         self.jail_turns = 0
         self.action_history = Stack()
         self.number_of_get_out_of_jail_card = 0
+        self.house_count_for_repair = 0
+        self.hotel_count_for_repair = 0
 
     def move(self,amount):
         if self.state == PlayerState.ACTIVE:
@@ -70,9 +72,11 @@ class Player:
 
     def build_house(self,property):
         property.plus_count()
+        self.house_count_for_repair += 1
 
     def build_hotel(self,property):
         property.has_hotel()
+        self.hotel_count_for_repair +=1
 
     def go_to_jail(self):
         self.jail_turns += 1
@@ -83,7 +87,10 @@ class Player:
         self.state = PlayerState.CURRENT_TURN
 
     def Use_get_out_of_jail_card(self):
+        if self.number_of_get_out_of_jail_card == 0:
+            return False
         self.state = PlayerState.CURRENT_TURN
+        return True
 
     def propose_trade(other_player, offer, request):
         pass
@@ -102,9 +109,9 @@ class Player:
         elif card.effect_type == CardEffectType.GO_TO_JAIL:
             self.go_to_jail()
         elif card.effect_type == CardEffectType.GET_OUT_OF_JAIL:
-            pass
-        elif card.effect_type == CardEffectType.TAX:
-            don = self.pay(card.effect_value)
+            self.number_of_get_out_of_jail_card +=1
+        elif card.effect_type == CardEffectType.REPAIR:
+            self.pay(self.hotel_count_for_repair*card.effect_value*3 + self.house_count_for_repair*card.effect_value)
 
 
 
