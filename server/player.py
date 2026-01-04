@@ -97,7 +97,6 @@ class Player:
         return True
 
 
-
     def can_trade(self, give_money, give_properties):
         if self.balance< give_money:
             return False
