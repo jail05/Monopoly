@@ -31,10 +31,6 @@ class Board:
             tile = Tile(data=data, type=t)
             self.tiles.Add(tile)
 
-
-
-
-
     def create_tile_data(self,type):
         if type == TileType.GO:
             return None
@@ -46,3 +42,6 @@ class Board:
             return 200
         elif type == TileType.JAIL:
             return None
+
+    def get_tiles(self):
+        return self.tiles

@@ -13,6 +13,8 @@ class Property:
         self.owner_id = None
 
 
+    def set_owner_id(self,owner_id):
+        self.owner_id = owner_id
 
     def has_owner(self):
         if self.owner_id==None:
@@ -51,6 +53,8 @@ class Property:
     def has_hotel(self):
         return self.has_hotel
 
+    def get_color(self):
+        return self.color_group
 
 
 

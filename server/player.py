@@ -1,8 +1,9 @@
-from ..DS.Tree import Tree
+from ..DS.BinaryTree import Tree
 from enum import Enum, auto
 from ..DS.stack import Stack
 from .card import CardEffectType
 from .action import *
+from ..DS .PropertyTree import *
 
 class PlayerState(Enum):
     CURRENT_TURN = auto()
@@ -18,10 +19,9 @@ class Player:
         self.id = Player.count
         self.balance = 100
         self.current_tile = tile_list.head
-        self.own_properties = Tree()
+        self.own_properties = PropertyTree()
         self.state = PlayerState.ACTIVE
         self.jail_turns = 0
-
         # این همون undoStack هست
         self.action_history = Stack(100)
         self.redo_stack = Stack(100)
@@ -47,20 +47,25 @@ class Player:
         self.balance += amount
 
     #مصادره ی املاک بعد از ورشکستگی
-    def clear_properties(self):
+    def bankrupt(self):
         self.state = PlayerState.BANKRUPT
+
+
 
     def ability_to_pay(self,amount):
         return self.balance >= amount
 
-    def add_property(self,property_id):
-        self.own_properties.insert(property_id)
+    def add_property(self,property):
+        self.own_properties.add_property(property.get_color(),property)
+        property.set_owner_id(self.id)
 
-    def remove_property(self,property_id):
-        self.own_properties.delete(property_id)
 
-    def has_property(self,property_id):
-        return self.own_properties.find_node(property_id)
+    def remove_property(self,property):
+        self.own_properties.remove_property(property.get_color(),property)
+
+
+    def has_property(self,property):
+        return self.has_property(property)
 
     def mortgage(self,property):
         self.balance += property.current_rent()+30
