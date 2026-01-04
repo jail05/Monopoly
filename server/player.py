@@ -112,26 +112,8 @@ class Player:
             return False
         if not other_player.can_trade(take_money, take_properties):
             return False
-        pass
-
-
-
-    def get_card(self,chance):
-        return chance.get_card()
-
-    def apply_card_effect(self,card):
-        if card.effect_type == CardEffectType.MOVE:
-            self.move(card.effect_value)
-        elif card.effect_type == CardEffectType.PAY_MONEY:
-            done = self.pay(card.effect_value)
-        elif card.effect_type == CardEffectType.RECEIVE_MONEY:
-            self.recieve(card.effect_value)
-        elif card.effect_type == CardEffectType.GO_TO_JAIL:
-            self.go_to_jail()
-        elif card.effect_type == CardEffectType.GET_OUT_OF_JAIL:
-            self.number_of_get_out_of_jail_card +=1
-        elif card.effect_type == CardEffectType.REPAIR:
-            self.pay(self.hotel_count_for_repair*card.effect_value*3 + self.house_count_for_repair*card.effect_value)
+        self.execute_trade(other_player, give_money, give_properties, take_money, take_properties)
+        return True
 
     def execute_trade(self, other_player, give_money, give_properties, take_money, take_properties):
         self.balance -= give_money
@@ -156,6 +138,25 @@ class Player:
         action.action_type = ActionType.Trade
         action.affected_entities = [other_player.id]
         self.action_history.push(action)
+
+    def get_card(self,chance):
+        return chance.get_card()
+
+    def apply_card_effect(self,card):
+        if card.effect_type == CardEffectType.MOVE:
+            self.move(card.effect_value)
+        elif card.effect_type == CardEffectType.PAY_MONEY:
+            done = self.pay(card.effect_value)
+        elif card.effect_type == CardEffectType.RECEIVE_MONEY:
+            self.recieve(card.effect_value)
+        elif card.effect_type == CardEffectType.GO_TO_JAIL:
+            self.go_to_jail()
+        elif card.effect_type == CardEffectType.GET_OUT_OF_JAIL:
+            self.number_of_get_out_of_jail_card +=1
+        elif card.effect_type == CardEffectType.REPAIR:
+            self.pay(self.hotel_count_for_repair*card.effect_value*3 + self.house_count_for_repair*card.effect_value)
+
+
 
 
 
