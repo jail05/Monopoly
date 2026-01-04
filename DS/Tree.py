@@ -1,4 +1,4 @@
-class Node:
+class TreeNode:
     def __init__(self , data):
         self.data = data
         self.left = None
@@ -10,7 +10,7 @@ class Tree:
         self.root = None
 
     def insert(self, data):
-        new_node = Node(data)
+        new_node = TreeNode(data)
 
         if not self.root:
             self.root = new_node
@@ -137,7 +137,7 @@ class Tree:
             return None
 
         root_value = postorder.pop()
-        root = Node(root_value)
+        root = TreeNode(root_value)
 
         index = inorder.index(root_value)
 

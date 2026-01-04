@@ -32,11 +32,11 @@ class Player:
     def move(self,amount):
         if self.state == PlayerState.ACTIVE:
             for i in range(amount):
-                self.current_tile = self.current_tile.next()
+                self.current_tile = self.current_tile.next
 
 
-    def pay(amount, self):
-        if self.ability_to_pay(amount):
+    def pay(self, amount):
+        if not self.ability_to_pay(amount):
             self.state = PlayerState.BANKRUPT
             return False
         else:
@@ -75,7 +75,7 @@ class Player:
             return False
 
     def build_house(self,property):
-        property.plus_count()
+        property.house_counter()
         self.house_count_for_repair += 1
 
     def build_hotel(self,property):

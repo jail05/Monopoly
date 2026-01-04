@@ -9,7 +9,7 @@ class Property:
         self.base_rent = 25
         self.house_count =0
         self.has_hotel = False
-        self.is_mortgaged = False
+        self.mortgaged = False
         self.owner_id = None
 
 
@@ -24,7 +24,7 @@ class Property:
         return self.is_mortgaged
 
     def current_rent(self):
-        if self.is_mortgaged():
+        if self.mortgaged():
             return 0
         elif self.has_hotel:
             return 5*self.base_rent
@@ -33,23 +33,22 @@ class Property:
 
     def can_build_house(self):
         return (not(self.has_hotel) and
-                not(self.is_mortgaged) and
+                not(self.mortgaged) and
                 self.house_count < 4)
 
     def can_build_hotel(self):
-        return not(self.has_hotel) and not(self.is_mortgaged) and self.house_count == 3
+        return not(self.has_hotel) and not(self.mortgaged) and self.house_count == 3
 
     def mortgage(self):
-        self.is_mortgaged = True
+        self.mortgaged = True
 
     def unmortgage(self):
-        self.is_mortgaged = False
+        self.mortgaged = False
 
     def house_counter(self):
         self.house_count += 1
 
     def has_hotel(self):
-        self.house_count = 0
         return self.has_hotel
 
 

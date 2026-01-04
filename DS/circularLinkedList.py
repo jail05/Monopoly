@@ -56,11 +56,3 @@ class CircularLinkedList:
             print(current.data)
             current = current.next
 
-
-g=CircularLinkedList()
-g.Add(1)
-g.Add(2)
-g.Add(3)
-g.printNode()
-g.delete(1)
-g.printNode()
