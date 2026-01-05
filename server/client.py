@@ -1,26 +1,29 @@
 class Client:
-    def __init__(self, game_state, server):
-        self.game_state = game_state
+    def __init__(self, server, name):
         self.server = server
+        self.name = name
+        self.client_id = id(self)
+        self.player_id = None
 
+    def connect(self):
+        response = self.server.handle_request(
+            self.client_id,
+            {"type": "HELLO", "name": self.name}
+        )
+        self.player_id = response["player_id"]
+        print("Connected as Player", self.player_id)
 
     def roll_dice(self):
-        dice = self.server.roll_dice()
-        self.game_state.move_current_player(dice)
+        return self.server.handle_request(self.client_id, {"type": "ROLL_DICE"})
 
-    def buy_property(self):
-        self.game_state.buy_current_property()
 
     def end_turn(self):
-        self.game_state.end_turn()
-
-    def get_chance_card(self):
-        self.game_state.get_chance_card()
+        return self.server.handle_request(self.client_id, {"type": "END_TURN"})
 
 
-    def show_ststus(self):
-        player = self.game_state.current_player
-        print("Player: ", player.name)
-        print("Balance: ", player.balance)
-        print("Position: ", player.current_tile.tile_id)
+    def undo(self):
+        return self.server.handle_request(self.client_id, {"type": "UNDO"})
+
+    def redo(self):
+        return self.server.handle_request(self.client_id, {"type": "REDO"})
 
