@@ -1,5 +1,5 @@
 class Dynamic_HashTable:
-    def init(self, max_size):
+    def __init__(self, max_size):
         self.max_size = max_size
         self.table = [None] * self.max_size
         self.size = 0
