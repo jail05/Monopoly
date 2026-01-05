@@ -3,6 +3,7 @@ from Monopoly.server.player import Player
 from ..DS .HashTable import Dynamic_HashTable
 from .property import Property
 from ..DS.Heap import Heap
+from ..DS.BinaryTree import Tree
 from ..DS.graph import Graph
 
 
@@ -132,3 +133,12 @@ class GameState:
 
             self.financial_graph.add_edge(payer.id, owner.id)
 
+    def report_sorted_players_by_balance(self):
+        bst = Tree()
+
+        for item in self.players.table:
+            if item is not None:
+                pid, player = item
+                bst.insert(player.balance, player.name)
+
+        return bst.print_inorder()
