@@ -10,14 +10,17 @@ class RequestType(Enum):
     END_TURN = auto()
     UNDO = auto()
     REDO = auto()
-
+from ..DS .graph import Graph
 
 class Server:
     def __init__(self):
-        self.game_state = GameState()
+        self.current_player = 1
+        self.game_state = GameState(self.current_player)
+        self.financial_graph = Graph()
         self.clients = {}
         self.current_turn = 0
         self.game_over = False
+
 
 
     def handle_hello(self, client_id, player_name):
