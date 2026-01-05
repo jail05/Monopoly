@@ -12,42 +12,45 @@ class GameState:
         self.players = Dynamic_HashTable(5)
         self.properties = Dynamic_HashTable(20)
         self.board = Board()
-        self.initialize_players()
-        self.current_player_index = current_player
+        # self.initialize_players()
+        # self.current_player_index = current_player
         self.round_number = 0
-        self.roll_dice = None
+        # self.roll_dice = None
         self.game_over = False
         self.financial_graph = Graph()
 
 
-    def initialize_players(self):
-        player1 = Player("A",self.board.get_tiles())
-        player2 = Player("B",self.board.get_tiles())
-        player3 = Player("C",self.board.get_tiles())
-        player4 = Player("D",self.board.get_tiles())
-        self.players.insert(1,player1)
-        self.players.insert(2,player2)
-        self.players.insert(3,player3)
-        self.players.insert(4,player4)
+    # def initialize_players(self):
+    #     player1 = Player("A",self.board.get_tiles())
+    #     player2 = Player("B",self.board.get_tiles())
+    #     player3 = Player("C",self.board.get_tiles())
+    #     player4 = Player("D",self.board.get_tiles())
+    #     self.players.insert(1,player1)
+    #     self.players.insert(2,player2)
+    #     self.players.insert(3,player3)
+    #     self.players.insert(4,player4)
 
-    def initialize_properties(self):
-        COLOR_GROUPS = {
-            "BROWN": 2,
-            "LIGHT_BLUE": 3,
-            "PINK": 3,
-            "ORANGE": 3,
-            "RED": 3,
-            "YELLOW": 3,
-            "GREEN": 3,
-        }
-        for color, count in COLOR_GROUPS.items():
-            for i in range(count):
-                name = f"{color}_{i + 1}"
-                p = Property(name=name,color=color)
-                self.properties.insert(p.ID,p)
+    def add_player(self, player: Player):
+        self.players.insert(player.id, player)
+
+    # def initialize_properties(self):
+    #     COLOR_GROUPS = {
+    #         "BROWN": 2,
+    #         "LIGHT_BLUE": 3,
+    #         "PINK": 3,
+    #         "ORANGE": 3,
+    #         "RED": 3,
+    #         "YELLOW": 3,
+    #         "GREEN": 3,
+    #     }
+    #     for color, count in COLOR_GROUPS.items():
+    #         for i in range(count):
+    #             name = f"{color}_{i + 1}"
+    #             p = Property(name=name,color=color)
+    #             self.properties.insert(p.ID,p)
 
     def remove_player(self, player):
-       self.current_player_index = (self.current_player_index + 1) % 4
+       # self.current_player_index = (self.current_player_index + 1) % 4
        player.own_properties.clear_all_properties()
        player.bankrupt()
 
@@ -126,19 +129,19 @@ class GameState:
 
         return result
 
-    def pay_rent(self, payer: Player, owner: Player, amount: int):
-        success = payer.pay(amount)
-        if success:
-            owner.recieve(amount)
-
-            self.financial_graph.add_edge(payer.id, owner.id)
-
-    def report_sorted_players_by_balance(self):
-        bst = Tree()
-
-        for item in self.players.table:
-            if item is not None:
-                pid, player = item
-                bst.insert(player.balance, player.name)
-
-        return bst.print_inorder()
+    # def pay_rent(self, payer: Player, owner: Player, amount: int):
+    #     success = payer.pay(amount)
+    #     if success:
+    #         owner.recieve(amount)
+    #
+    #         self.financial_graph.add_edge(payer.id, owner.id)
+    #
+    # def report_sorted_players_by_balance(self):
+    #     bst = Tree()
+    #
+    #     for item in self.players.table:
+    #         if item is not None:
+    #             pid, player = item
+    #             bst.insert(player.balance, player.name)
+    #
+    #     return bst.print_inorder()
