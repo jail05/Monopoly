@@ -66,6 +66,7 @@ class MonopolyGUI:
         self.update_state(self.client.send({"type": "END_TURN"}))
 
 
+
     def update_state(self, response):
         if response.get("type") == "ERROR":
             self.log("ERROR: " + response["message"])
