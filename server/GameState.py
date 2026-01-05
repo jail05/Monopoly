@@ -8,9 +8,9 @@ class GameState:
     def __init__(self):
         self.players = Dynamic_HashTable(5)
         self.properties = Dynamic_HashTable(20)
+        self.board = Board()
         self.initialize_players()
         self.current_player_index = 1
-        self.board = Board()
         self.round_number = 0
         self.roll_dice = None
         self.game_over = False

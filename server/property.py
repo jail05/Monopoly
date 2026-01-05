@@ -8,7 +8,7 @@ class Property:
         self.purchase_price = 20
         self.base_rent = 25
         self.house_count =0
-        self.has_hotel = False
+        self.has_hotel_ = False
         self.mortgaged = False
         self.owner_id = None
 
@@ -26,7 +26,7 @@ class Property:
         return self.is_mortgaged
 
     def current_rent(self):
-        if self.mortgaged():
+        if self.mortgaged:
             return 0
         elif self.has_hotel:
             return 5*self.base_rent
@@ -34,7 +34,7 @@ class Property:
             return (self.house_count+1)*self.base_rent
 
     def can_build_house(self):
-        return (not(self.has_hotel) and
+        return (not(self.has_hotel_) and
                 not(self.mortgaged) and
                 self.house_count < 4)
 
@@ -51,7 +51,7 @@ class Property:
         self.house_count += 1
 
     def has_hotel(self):
-        return self.has_hotel
+        return self.has_hotel_
 
     def get_color(self):
         return self.color_group

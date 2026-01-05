@@ -65,7 +65,7 @@ class Player:
 
 
     def has_property(self,property):
-        return self.has_property(property)
+        return self.own_properties.has_property(self.own_properties.root, property)
 
     def mortgage(self,property):
         self.balance += property.current_rent()+30

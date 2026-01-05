@@ -1,6 +1,6 @@
 from random import randint
 from enum import Enum, auto
-from game_state import GameState
+from GameState import GameState
 
 
 class RequestType(Enum):
