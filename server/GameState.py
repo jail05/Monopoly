@@ -13,6 +13,7 @@ class GameState:
         self.roll_dice = None
         self.game_over = False
 
+
     def initialize_players(self):
         player1 = Player("A",self.board.get_tiles())
         player2 = Player("B",self.board.get_tiles())
