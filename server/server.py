@@ -1,9 +1,7 @@
 from random import randint
 from enum import Enum, auto
 from GameState import GameState
-from Monopoly.server.player import Player
-from Monopoly.server.property import Property
-
+from ..DS .graph import Graph
 
 class RequestType(Enum):
     HELLO = auto()
@@ -12,7 +10,7 @@ class RequestType(Enum):
     END_TURN = auto()
     UNDO = auto()
     REDO = auto()
-from ..DS .graph import Graph
+
 
 class Server:
     def __init__(self):
@@ -99,27 +97,4 @@ class Server:
             "state": self.game_state.snapshot()
         }
 
-
-    def handle_trade(self, player_id, trade_data):
-        player = self.game_state.players.search(player_id)[1]
-        other = self.game_state.players.search(trade_data["to"])[1]
-
-        success = player.propose_trade(
-            other,
-            trade_data["give_money"],
-            trade_data["give_properties"],
-            trade_data["take_money"],
-            trade_data["take_properties"]
-        )
-
-        if success:
-            self.game_state.financial_graph.add_edge(player.id, other.id)
-
-        return success
-
-    def handle_landing_on_property(self, player: Player, property: Property):
-        if property.has_owner() and property.owner_id != player.id:
-            owner = self.players.search(property.owner_id)[1]
-            rent = property.current_rent()
-            self.pay_rent(player, owner, rent)
 
