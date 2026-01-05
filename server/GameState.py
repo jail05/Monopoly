@@ -1,11 +1,13 @@
 from Monopoly.server.board import Board
 from Monopoly.server.player import Player
 from ..DS .HashTable import Dynamic_HashTable
+from .property import Property
 
 
 class GameState:
     def __init__(self):
         self.players = Dynamic_HashTable(5)
+        self.properties = Dynamic_HashTable(20)
         self.initialize_players()
         self.current_player_index = 1
         self.board = Board()
@@ -24,9 +26,45 @@ class GameState:
         self.players.insert(3,player3)
         self.players.insert(4,player4)
 
+    def initialize_properties(self):
+        COLOR_GROUPS = {
+            "BROWN": 2,
+            "LIGHT_BLUE": 3,
+            "PINK": 3,
+            "ORANGE": 3,
+            "RED": 3,
+            "YELLOW": 3,
+            "GREEN": 3,
+        }
+        for color, count in COLOR_GROUPS.items():
+            for i in range(count):
+                name = f"{color}_{i + 1}"
+                p = Property(name=name,color=color)
+                self.properties.insert(p.ID,p)
+
     def remove_player(self, player):
        self.current_player_index = (self.current_player_index + 1) % 4
-       # self.player.
+       player.own_properties.clear_all_properties()
+       player.bankrupt()
+
+    def snapshot(self):
+        players_snapshot = {}
+
+        for item in self.players.table:
+            if item is not None:
+                pid, player = item
+                players_snapshot[pid] = {
+                    "balance": player.balance,
+                    "tile": player.current_tile.id,
+                    "state": player.state
+                }
+
+        return {
+            "players": players_snapshot,
+            "current_player": self.current_player_index,
+            "round": self.round_number,
+            "game_over": self.game_over
+        }
 
 
 
