@@ -3,18 +3,20 @@ from Monopoly.server.player import Player
 from ..DS .HashTable import Dynamic_HashTable
 from .property import Property
 from ..DS.Heap import Heap
+from ..DS.BinaryTree import Tree
 from ..DS.graph import Graph
 
 
 class GameState:
-    def __init__(self, current_player):
+    def __init__(self):
         self.players = Dynamic_HashTable(5)
         self.properties = Dynamic_HashTable(20)
         self.board = Board()
         self.initialize_players()
-        self.current_player_index = current_player
+        self.initialize_properties()
+        # self.current_player_index = current_player
         self.round_number = 0
-        self.roll_dice = None
+        # self.roll_dice = None
         self.game_over = False
         self.financial_graph = Graph()
 
@@ -28,6 +30,9 @@ class GameState:
         self.players.insert(2,player2)
         self.players.insert(3,player3)
         self.players.insert(4,player4)
+
+    def add_player(self, player: Player):
+        self.players.insert(player.id, player)
 
     def initialize_properties(self):
         COLOR_GROUPS = {
@@ -46,7 +51,7 @@ class GameState:
                 self.properties.insert(p.ID,p)
 
     def remove_player(self, player):
-       self.current_player_index = (self.current_player_index + 1) % 4
+       # self.current_player_index = (self.current_player_index + 1) % 4
        player.own_properties.clear_all_properties()
        player.bankrupt()
 
@@ -132,17 +137,12 @@ class GameState:
 
             self.financial_graph.add_edge(payer.id, owner.id)
 
-    def start_turn(self):
-        pass
+    def report_sorted_players_by_balance(self):
+        bst = Tree()
 
-    def roll_dice(self, player):
-        pass
+        for item in self.players.table:
+            if item is not None:
+                pid, player = item
+                bst.insert(player.balance, player.name)
 
-    def move_player(self, player, dice):
-        pass
-
-    def resolve_tile(self, player):
-        pass
-
-    def end_turn(self):
-        pass
+        return bst.print_inorder()
