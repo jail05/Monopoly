@@ -16,6 +16,7 @@ class pNode:
 class PropertyTree:
     def __init__(self,player):
         self.root = pNode(player,"PLAYER")
+        self.number_of_property = 0
 
     def add_color(self,color):
         new = pNode(color,"COLOR")
@@ -25,6 +26,7 @@ class PropertyTree:
     def add_property(self,color,property):
         new = pNode(property,"PROPERTY")
         color.add_child(new)
+        self.number_of_property += 1
         return new
 
     def add_house(self,property):
@@ -38,6 +40,7 @@ class PropertyTree:
     def remove_property(self,color,property):
         property.owner_id = None
         color.remove_child(property)
+        self.number_of_property -= 1
 
     def has_property(self,node,property):
         if not node.node_type== "PROPERTY" and node.value==property:
@@ -48,6 +51,26 @@ class PropertyTree:
                 return True
 
         return False
+    def get_property_count(self):
+        return self.number_of_property
+
+    def clear_all_properties(self):
+
+        for color_node in self.root.children:
+
+
+            properties = []
+
+            for child in color_node.children:
+                if child.node_type == "PROPERTY":
+                    properties.append(child)
+
+
+            for prop_node in properties:
+                prop_node.value.owner_id = None
+                color_node.removeChild(prop_node)
+                self.number_of_property -= 1
+
 
 
 
