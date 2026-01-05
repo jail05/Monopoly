@@ -5,6 +5,11 @@ class Client:
         self.client_id = id(self)
         self.player_id = None
 
+
+
+    def send(self, request):
+        return self.server.handle_request(self.client_id, request)
+
     def connect(self):
         response = self.server.handle_request(
             self.client_id,

@@ -132,3 +132,17 @@ class GameState:
 
             self.financial_graph.add_edge(payer.id, owner.id)
 
+    def start_turn(self):
+        pass
+
+    def roll_dice(self, player):
+        pass
+
+    def move_player(self, player, dice):
+        pass
+
+    def resolve_tile(self, player):
+        pass
+
+    def end_turn(self):
+        pass

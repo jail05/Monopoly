@@ -26,6 +26,8 @@ class Server:
     def handle_hello(self, client_id, player_name):
         if len(self.game_state.players) >= 4:
             return {"type": "ERROR", "message": "Game is full"}
+        if not self.is_players_turn(player):
+            return {"type": "ERROR", "message": "Not your turn"}
 
         player = self.game_state.add_player(player_name)
         self.clients[client_id] = player.id
@@ -40,6 +42,9 @@ class Server:
         if self.game_over:
             return {"type": "ERROR", "message": "Game Over"}
 
+        if not self.is_players_turn(player):
+            return {"type": "ERROR", "message": "Not your turn"}
+
         player = self.get_current_player(client_id)
         dice = randint(2, 12)
 
@@ -50,22 +55,34 @@ class Server:
 
 
     def handle_end_turn(self, client_id):
+        if not self.is_players_turn(player):
+            return {"type": "ERROR", "message": "Not your turn"}
+
         self.current_turn = (self.current_turn + 1) % len(self.game_state.players)
         return self.state_update()
 
 
     def handle_undo(self, client_id):
+        if not self.is_players_turn(player):
+            return {"type": "ERROR", "message": "Not your turn"}
+
         player = self.get_current_player(client_id)
         player.undo_action()
         return self.state_update()
 
     def handle_redo(self, client_id):
+        if not self.is_players_turn(player):
+            return {"type": "ERROR", "message": "Not your turn"}
+
         player = self.get_current_player(client_id)
         player.redo_action()
         return self.state_update()
 
 
     def handle_request(self, client_id, request):
+        if not self.is_players_turn(player):
+            return {"type": "ERROR", "message": "Not your turn"}
+
         rtype = request["type"]
 
         if rtype == RequestType.HELLO:
@@ -96,5 +113,12 @@ class Server:
             "type": "STATE_UPDATE",
             "state": self.game_state.snapshot()
         }
+
+    def is_players_turn(self, player):
+        return player.id == self.current_player
+
+    start_turn(player)
+    resolve_tile(player)
+    end_turn()
 
 
