@@ -142,7 +142,7 @@ class Player:
             self.own_properties.insert(prop)
 
 
-        action = Action(self.id,ActionType.Trade)
+        action = Action(ActionType.Trade, self.id, [other_player.id], None, None)
         action.affected_entities = [other_player.id]
         self.action_history.push(action)
 
