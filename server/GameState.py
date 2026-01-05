@@ -8,12 +8,12 @@ from ..DS.graph import Graph
 
 
 class GameState:
-    def __init__(self):
+    def __init__(self, current_player):
         self.players = Dynamic_HashTable(5)
         self.properties = Dynamic_HashTable(20)
         self.board = Board()
         self.initialize_players()
-        self.current_player_index = 1
+        self.current_player_index = current_player
         self.round_number = 0
         self.roll_dice = None
         self.game_over = False
