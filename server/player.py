@@ -190,8 +190,13 @@ class Player:
         self.jail_turns = state["jail_turns"]
         self.own_properties = state["own_properties"]
 
-
-
+    def total_rent_value(self):
+        total = 0
+        for color_node in self.own_properties.root.children:
+            for prop_node in color_node.children:
+                prop = prop_node.value
+                total += prop.current_rent()
+        return total
 
 
 

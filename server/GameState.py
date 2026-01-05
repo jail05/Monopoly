@@ -2,6 +2,8 @@ from Monopoly.server.board import Board
 from Monopoly.server.player import Player
 from ..DS .HashTable import Dynamic_HashTable
 from .property import Property
+from ..DS.Heap import Heap
+from ..DS.graph import Graph
 
 
 class GameState:
@@ -14,6 +16,7 @@ class GameState:
         self.round_number = 0
         self.roll_dice = None
         self.game_over = False
+        self.financial_graph = Graph()
 
 
     def initialize_players(self):
@@ -67,4 +70,65 @@ class GameState:
         }
 
 
+    def report_top_k_balance(self, k=3):
+        heap = Heap()
+
+        for item in self.players.table:
+            if item is not None:
+                pid, player = item
+                heap.insert((player.balance, player.name))
+
+        result = []
+        for i in range(k):
+            top = heap.get_max()
+            if top is None:
+                break
+            result.append(top)
+            heap.heap.remove(top)
+
+        return result
+
+    def report_top_k_properties(self, k=3):
+        heap = Heap()
+
+        for item in self.players.table:
+            if item is not None:
+                pid, player = item
+                count = player.own_properties.get_property_count()
+                heap.insert((count, player.name))
+
+        result = []
+        for i in range(k):
+            top = heap.get_max()
+            if top is None:
+                break
+            result.append(top)
+            heap.heap.remove(top)
+
+        return result
+
+    def report_top_k_rent(self, k=3):
+        heap = Heap()
+
+        for item in self.players.table:
+            if item is not None:
+                pid, player = item
+                heap.insert((player.total_rent_value(), player.name))
+
+        result = []
+        for _ in range(k):
+            top = heap.get_max()
+            if top is None:
+                break
+            result.append(top)
+            heap.heap.remove(top)
+
+        return result
+
+    def pay_rent(self, payer: Player, owner: Player, amount: int):
+        success = payer.pay(amount)
+        if success:
+            owner.recieve(amount)
+
+            self.financial_graph.add_edge(payer.id, owner.id)
 
