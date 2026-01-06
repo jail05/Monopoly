@@ -111,7 +111,7 @@ class Server:
     #         "state": self.game_state.snapshot()
     #     }
     #
-    #
+
     def init_players(self):
         for name in ["A", "B", "C", "D"]:
             player = Player(name, self.game_state.board.get_tiles())
