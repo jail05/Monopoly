@@ -95,24 +95,24 @@ class GameState:
 
         return result
 
-    def report_top_k_properties(self, k=3):
-        heap = Heap()
-
-        for item in self.players.table:
-            if item is not None:
-                pid, player = item
-                count = player.own_properties.get_property_count()
-                heap.insert((count, player.name))
-
-        result = []
-        for i in range(k):
-            top = heap.get_max()
-            if top is None:
-                break
-            result.append(top)
-            heap.heap.remove(top)
-
-        return result
+    # def report_top_k_properties(self, k=3):
+    #     heap = Heap()
+    #
+    #     for item in self.players.table:
+    #         if item is not None:
+    #             pid, player = item
+    #             count = player.own_properties.get_property_count()
+    #             heap.insert((count, player.name))
+    #
+    #     result = []
+    #     for i in range(k):
+    #         top = heap.get_max()
+    #         if top is None:
+    #             break
+    #         result.append(top)
+    #         heap.heap.remove(top)
+    #
+    #     return result
 
     def report_top_k_rent(self, k=3):
         heap = Heap()
@@ -147,7 +147,67 @@ class GameState:
                 pid, player = item
                 bst.insert(player.balance, player.name)
 
-        return bst.print_inorder()
+        return bst.print_inorder(bst.root)
+
+    def report_top_k_payers(self, k=3):
+        heap = Heap()
+
+        for player_id in self.financial_graph.adj_list:
+            total_paid = 0
+            for neighbor, weight in self.financial_graph.adj_list[player_id]:
+                total_paid += weight
+
+            player = self.players.search(player_id)[1]
+            heap.insert((total_paid, player.name))
+
+        result = []
+        for _ in range(k):
+            top = heap.get_max()
+            if top is None:
+                break
+            result.append(top)
+            heap.heap.remove(top)
+
+        return result
+
+    def report_top_k_receivers(self, k=3):
+        heap = Heap()
+        income = {}
+
+        for u in self.financial_graph.adj_list:
+            for v, weight in self.financial_graph.adj_list[u]:
+                income[v] = income.get(v, 0) + weight
+
+        for player_id, total in income.items():
+            player = self.players.search(player_id)[1]
+            heap.insert((total, player.name))
+
+        result = []
+        for _ in range(k):
+            top = heap.get_max()
+            if top is None:
+                break
+            result.append(top)
+            heap.heap.remove(top)
+
+        return result
+
+    def report_top_k_interactions(self, k=3):
+        heap = Heap()
+
+        for u in self.financial_graph.adj_list:
+            for v, weight in self.financial_graph.adj_list[u]:
+                heap.insert((weight, (u, v)))
+
+        result = []
+        for _ in range(k):
+            top = heap.get_max()
+            if top is None:
+                break
+            result.append(top)
+            heap.heap.remove(top)
+
+        return result
 
 
     def report_top_k_payers(self, k=3):
