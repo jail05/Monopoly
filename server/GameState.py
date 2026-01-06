@@ -1,3 +1,5 @@
+import heapq
+
 from Monopoly.server.board import Board
 from Monopoly.server.player import Player
 from ..DS .HashTable import Dynamic_HashTable
@@ -135,7 +137,7 @@ class GameState:
         if success:
             owner.recieve(amount)
 
-            self.financial_graph.add_edge(payer.id, owner.id)
+            self.financial_graph.add_edge(payer.id, owner.id, amount)
 
     def report_sorted_players_by_balance(self):
         bst = Tree()
@@ -146,3 +148,29 @@ class GameState:
                 bst.insert(player.balance, player.name)
 
         return bst.print_inorder()
+
+
+    def report_top_k_payers(self, k=3):
+        heap = Heap()
+        for u in self.financial_graph.adj_list:
+            total = sum(self.financial_graph.adj_list[u].values())
+            heap.insert((total, u))
+        return heap.extract_top_k(k)
+
+    def report_top_k_receivers(self, k=3):
+        incoming = {}
+        for u in self.financial_graph.adj_list:
+            for v, w in self.financial_graph.adj_list[u].items():
+                incoming[v] = incoming.get(v, 0) + w
+
+        heap = Heap()
+        for pid, total in incoming.items():
+            heap.insert((total, pid))
+        return heap.extract_top_k(k)
+
+    def report_top_k_interactions(self, k=3):
+        heap = Heap()
+        for u in self.financial_graph.adj_list:
+            for v, w in self.financial_graph.adj_list[u].items():
+                heap.insert((w, (u, v)))
+        return heap.extract_top_k(k)
