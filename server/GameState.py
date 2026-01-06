@@ -1,3 +1,5 @@
+import heapq
+
 from Monopoly.server.board import Board
 from Monopoly.server.player import Player
 from ..DS .HashTable import Dynamic_HashTable
@@ -135,7 +137,7 @@ class GameState:
         if success:
             owner.recieve(amount)
 
-            self.financial_graph.add_edge(payer.id, owner.id)
+            self.financial_graph.add_edge(payer.id, owner.id, amount)
 
     def report_sorted_players_by_balance(self):
         bst = Tree()
@@ -206,3 +208,4 @@ class GameState:
             heap.heap.remove(top)
 
         return result
+

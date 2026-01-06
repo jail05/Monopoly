@@ -1,8 +1,6 @@
 from random import randint
-from enum import Enum, auto
 from GameState import GameState
 from .chanceCard import ChanceCard
-from ..DS .graph import Graph
 from .player import *
 
 class RequestType(Enum):
@@ -113,7 +111,7 @@ class Server:
     #         "state": self.game_state.snapshot()
     #     }
     #
-    #
+
     def init_players(self):
         for name in ["A", "B", "C", "D"]:
             player = Player(name, self.game_state.board.get_tiles())
@@ -259,10 +257,4 @@ class Server:
             "type": "STATE_UPDATE",
             "state": self.game_state.snapshot()
         }
-
-    def init_players(self):
-        for name in ["A", "B", "C", "D"]:
-            player = Player(name, self.game_state.board.get_tiles())
-            self.game_state.add_player(player)
-            self.turn_order.append(player.id)
 
