@@ -24,7 +24,7 @@ class Server:
         self.current_turn = 0
         self.chance_card = ChanceCard()
         self.turn_order = []  # ترتیب چرخش بازیکن‌ها
-        self.current_turn_index = 0  # اندیس بازیکن فعلی
+        self.current_player_index = 0  # اندیس بازیکن فعلی
         self.pending_action = None  # برای BUY_PROPERTY
 
         # self.game_over = False
@@ -121,7 +121,7 @@ class Server:
             self.turn_order.append(player.id)
 
     def get_current_player(self):
-        pid = self.turn_order[self.current_turn_index]
+        pid = self.turn_order[self.current_player_index]
         return self.game_state.players.search(pid)[1]
 
     def is_players_turn(self, client_id):
@@ -197,7 +197,7 @@ class Server:
             self.chance_card.returnCard(card)
 
     def end_turn(self):
-        self.current_turn_index = (self.current_turn_index + 1) % len(self.turn_order)
+        self.current_player_index = (self.current_player_index + 1) % len(self.turn_order)
         self.game_state.round_number += 1
 
 
