@@ -209,28 +209,3 @@ class GameState:
 
         return result
 
-
-    def report_top_k_payers(self, k=3):
-        heap = Heap()
-        for u in self.financial_graph.adj_list:
-            total = sum(self.financial_graph.adj_list[u].values())
-            heap.insert((total, u))
-        return heap.extract_top_k(k)
-
-    def report_top_k_receivers(self, k=3):
-        incoming = {}
-        for u in self.financial_graph.adj_list:
-            for v, w in self.financial_graph.adj_list[u].items():
-                incoming[v] = incoming.get(v, 0) + w
-
-        heap = Heap()
-        for pid, total in incoming.items():
-            heap.insert((total, pid))
-        return heap.extract_top_k(k)
-
-    def report_top_k_interactions(self, k=3):
-        heap = Heap()
-        for u in self.financial_graph.adj_list:
-            for v, w in self.financial_graph.adj_list[u].items():
-                heap.insert((w, (u, v)))
-        return heap.extract_top_k(k)
