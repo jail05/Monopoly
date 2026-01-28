@@ -1,5 +1,5 @@
 from random import randint
-from GameState import GameState
+from .GameState import GameState
 from .chanceCard import ChanceCard
 from .player import *
 
