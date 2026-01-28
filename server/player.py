@@ -4,6 +4,7 @@ from ..DS.stack import Stack
 from .card import CardEffectType
 from .action import *
 from ..DS .PropertyTree import *
+from .tile import *
 
 class PlayerState(Enum):
     CURRENT_TURN = auto()
@@ -29,11 +30,19 @@ class Player:
         self.house_count_for_repair = 0
         self.hotel_count_for_repair = 0
 
-    def move(self,amount):
-        if self.state == PlayerState.ACTIVE:
-            for i in range(amount):
-                self.current_tile = self.current_tile.next
+    def move(self, amount):
+        if self.state != PlayerState.ACTIVE:
+            return
 
+        prev_state = self.export_state()
+        for _ in range(amount):
+            self.current_tile = self.current_tile.next
+
+            if self.current_tile.tile_type == TileType.GO:
+                self.recieve(200)
+        new_state = self.export_state()
+        action = Action(ActionType.Move, self.id, [], prev_state, new_state)
+        self.add_action(action)
 
     def pay(self, amount):
         if not self.ability_to_pay(amount):
@@ -68,24 +77,41 @@ class Player:
         return self.own_properties.has_property(self.own_properties.root, property)
 
     def mortgage(self,property):
+        prev = self.export_state()
         self.balance += property.current_rent()+30
         property.mortgage()
+        new = self.export_state()
+
+        self.add_action(Action(ActionType.Mortgage, self.id, [property.ID], prev, new))
 
     def unmortgage_property(self,property):
+        prev = self.export_state()
         if self.can_afford(property.current_rent()):
             self.balance += property.current_rent() + 30
             property.unmortgage()
+            new = self.export_state()
+
+            self.add_action(Action(ActionType.Mortgage, self.id, [property.ID], prev, new))
+
             return True
         else:
             return False
 
     def build_house(self,property):
+        prev = self.export_state()
         property.house_counter()
         self.house_count_for_repair += 1
+        new = self.export_state()
+
+        self.add_action(Action(ActionType.Build, self.id, [property.ID], prev, new))
 
     def build_hotel(self,property):
+        prev = self.export_state()
         property.has_hotel()
         self.hotel_count_for_repair +=1
+        new = self.export_state()
+
+        self.add_action(Action(ActionType.Build, self.id, [property.ID], prev, new))
 
     def go_to_jail(self):
         self.jail_turns += 1
@@ -198,6 +224,13 @@ class Player:
                 total += prop.current_rent()
         return total
 
+    def export_state(self):
+        return {
+            "balance": self.balance,
+            "tile_id": self.current_tile.id,
+            "state": self.state,
+            "properties": self.own_properties.export()
+        }
 
 
 

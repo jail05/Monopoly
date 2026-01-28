@@ -1,5 +1,3 @@
-import heapq
-
 from Monopoly.server.board import Board
 from Monopoly.server.player import Player
 from ..DS .HashTable import Dynamic_HashTable
@@ -7,6 +5,7 @@ from .property import Property
 from ..DS.Heap import Heap
 from ..DS.BinaryTree import Tree
 from ..DS.graph import Graph
+from .action import *
 
 
 class GameState:
@@ -23,15 +22,15 @@ class GameState:
         self.financial_graph = Graph()
 
 
-    def initialize_players(self):
-        player1 = Player("A",self.board.get_tiles())
-        player2 = Player("B",self.board.get_tiles())
-        player3 = Player("C",self.board.get_tiles())
-        player4 = Player("D",self.board.get_tiles())
-        self.players.insert(1,player1)
-        self.players.insert(2,player2)
-        self.players.insert(3,player3)
-        self.players.insert(4,player4)
+    # def initialize_players(self):
+    #     player1 = Player("A",self.board.get_tiles())
+    #     player2 = Player("B",self.board.get_tiles())
+    #     player3 = Player("C",self.board.get_tiles())
+    #     player4 = Player("D",self.board.get_tiles())
+    #     self.players.insert(1,player1)
+    #     self.players.insert(2,player2)
+    #     self.players.insert(3,player3)
+    #     self.players.insert(4,player4)
 
     def add_player(self, player: Player):
         self.players.insert(player.id, player)
@@ -133,11 +132,14 @@ class GameState:
         return result
 
     def pay_rent(self, payer: Player, owner: Player, amount: int):
+        prev_payer = payer.export_state()
+        prev_owner = owner.export_state()
         success = payer.pay(amount)
         if success:
             owner.recieve(amount)
-
-            self.financial_graph.add_edge(payer.id, owner.id, amount)
+            self.financial_graph.add_edge(payer.id, owner.id)
+            payer.add_action(Action(ActionType.PayRent, payer.id, [owner.id], prev_payer, payer.export_state()))
+            owner.add_action(Action(ActionType.PayRent, owner.id, [payer.id], prev_owner, owner.export_state()))
 
     def report_sorted_players_by_balance(self):
         bst = Tree()
@@ -208,4 +210,3 @@ class GameState:
             heap.heap.remove(top)
 
         return result
-

@@ -71,8 +71,22 @@ class PropertyTree:
                 color_node.removeChild(prop_node)
                 self.number_of_property -= 1
 
+    def export(self):
+        result = {}
+        for color_node in self.root.children:
+            color = color_node.value
+            result[color] = []
 
-
+            for prop_node in color_node.children:
+                if prop_node.node_type == "PROPERTY":
+                    prop = prop_node.value
+                    result[color].append({
+                        "property_id": prop.ID,
+                        "houses": prop.house_count,
+                        "hotel": prop.has_hotel_,
+                        "mortgaged": prop.mortgaged
+                    })
+        return result
 
 
 

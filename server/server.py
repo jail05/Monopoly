@@ -171,6 +171,7 @@ class Server:
         if self.pending_action["property_id"] != property_id:
             return {"type": "ERROR", "message": "Invalid property"}
 
+        prev_state = self.get_current_player().export_state()
         player = self.get_current_player()
         prop = self.game_state.properties.search(property_id)[1]
 
@@ -182,7 +183,16 @@ class Server:
 
         prop.set_owner_id(player.id)
         player.add_property(prop)
+        new_state = player.export_state()
 
+        action = Action(
+            ActionType.BuyProperty,
+            player.id,
+            [prop.ID],
+            prev_state,
+            new_state
+        )
+        player.add_action(action)
         self.pending_action = None
         return self.state_update()
 
